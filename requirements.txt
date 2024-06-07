@@ -1,0 +1,5 @@
+numpy==1.6.1
+scipy==0.10.0
+pandas==0.8.1
+matplotlib==1.1.1
+wave==0.0.2

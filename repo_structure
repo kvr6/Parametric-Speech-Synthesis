@@ -1,0 +1,19 @@
+parametric-speech-synthesis/
+│
+├── data/
+│   ├── phoneme_formant_data.csv
+│   ├── sample_text.txt
+│   ├── synthetic_corpus.txt
+│   └── natural_speech_samples/
+│       └── *.wav
+├── src/
+│   ├── synthesizer.py
+│   ├── formant_model.py
+│   ├── analysis.py
+│   └── evaluation.py
+├── results/
+│   ├── synthesized_speech.wav
+│   ├── evaluation_report.md
+│   └── ...
+├── README.md
+└── requirements.txt
