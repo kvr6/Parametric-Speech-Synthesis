@@ -1,76 +1,54 @@
 import numpy as np
+import scipy.io.wavfile as wav
 import pandas as pd
-import wave
-import struct
-import nltk
-from scipy.signal import lfilter
+from formant_model import FormantModel
 
-# Ensure NLTK datasets are downloaded (run once)
-nltk.download('cmudict')
+def text_to_phenomes(text, csv_path='data/phenome_formant_data.csv'):
+    """
+    Convert text to a sequence of phenomes using the phenome formant data CSV file.
+    
+    Parameters:
+    text (str): The input text.
+    csv_path (str): Path to the CSV file containing formant data.
+    
+    Returns:
+    list: List of phenomes.
+    """
+    # Load the phenome data
+    phenome_data = pd.read_csv(csv_path)
 
-# Load CMU Pronouncing Dictionary
-cmudict = nltk.corpus.cmudict.dict()
+    # Prepare a mapping from phenomes to their properties
+    phenome_set = set(phenome_data['Phenome'])
+    words = text.lower().split()
+    phenomes = []
 
-# Load phoneme formant data
-phoneme_data = pd.read_csv('data/phoneme_formant_data.csv').set_index('Phoneme')
-
-class FormantModel:
-    def __init__(self):
-        self.phoneme_data = phoneme_data
-
-    def get_formants(self, phoneme):
-        if phoneme not in self.phoneme_data.index:
-            return None
-        f1 = np.random.normal(self.phoneme_data.loc[phoneme, 'F1_Mean'], self.phoneme_data.loc[phoneme, 'F1_Std'])
-        f2 = np.random.normal(self.phoneme_data.loc[phoneme, 'F2_Mean'], self.phoneme_data.loc[phoneme, 'F2_Std'])
-        f3 = np.random.normal(self.phoneme_data.loc[phoneme, 'F3_Mean'], self.phoneme_data.loc[phoneme, 'F3_Std'])
-        return f1, f2, f3
-
-def generate_waveform(formants, duration=0.1, sampling_rate=16000):
-    t = np.linspace(0, duration, int(sampling_rate * duration), endpoint=False)
-    waveform = sum(np.sin(2 * np.pi * formant * t) for formant in formants)
-    # Apply a simple envelope for smoothing
-    envelope = np.linspace(0, 1, int(sampling_rate * duration / 2))
-    envelope = np.concatenate((envelope, envelope[::-1]))
-    return waveform * envelope
-
-def text_to_phonemes(text):
-    words = nltk.word_tokenize(text.lower())
-    phoneme_sequence = []
+    # Simplified conversion assuming words match phenomes directly
     for word in words:
-        if word in cmudict:
-            phonemes = cmudict[word][0]  # Take the first pronunciation
-            phoneme_sequence.extend(phonemes)
+        if word in phenome_set:
+            phenomes.append(word)
         else:
-            phoneme_sequence.append(' ')
-    return phoneme_sequence
+            phenomes.append('_')  # Placeholder for unknown phenomes
 
-def save_wave(waveform, filename, sampling_rate=16000):
-    waveform_integers = np.int16(waveform * 32767)
-    with wave.open(filename, 'w') as wf:
-        wf.setnchannels(1)
-        wf.setsampwidth(2)
-        wf.setframerate(sampling_rate)
-        wf.writeframes(waveform_integers.tobytes())
+    return phenomes
+
+def synthesize_text_to_speech(text, output_file='results/synthesized_speech.wav'):
+    """
+    Synthesize speech from text and save it as a WAV file.
+    
+    Parameters:
+    text (str): The input text.
+    output_file (str): Path to the output WAV file.
+    """
+    formant_model = FormantModel()
+    phenomes = text_to_phenomes(text)
+    waveform = formant_model.synthesize_speech(phenomes)
+    waveform = (waveform * 32767).astype(np.int16)  # Scale to int16 for WAV
+    wav.write(output_file, formant_model.sampling_rate, waveform)
 
 if __name__ == "__main__":
-    # Load the synthetic corpus text
-    with open('data/synthetic_corpus.txt', 'r') as file:
-        text = file.read().replace('\n', ' ')
-    
-    formant_model = FormantModel()
-    phoneme_sequence = text_to_phonemes(text)
-    
-    waveform = np.array([])
-    for phoneme in phoneme_sequence:
-        if phoneme.isdigit():  # Ignore stress markers from CMUDict
-            continue
-        formants = formant_model.get_formants(phoneme)
-        if formants:
-            waveform = np.concatenate((waveform, generate_waveform(formants)))
-        else:
-            # Add a small silence for unrecognized phonemes or spaces
-            waveform = np.concatenate((waveform, np.zeros(int(0.05 * 16000))))
-    
-    # Save the generated waveform to a file
-    save_wave(waveform, 'results/synthesized_speech.wav')
+    try:
+        with open('data/synthetic_corpus.txt', 'r') as file:
+            text = file.read()
+        synthesize_text_to_speech(text)
+    except FileNotFoundError as e:
+        print(f"Error: {e}. Ensure that the 'data/phenome_formant_data.csv' and 'data/synthetic_corpus.txt' files exist.")
