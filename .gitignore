@@ -160,3 +160,15 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+git_vscode/bin/python
+.gitignore
+git_vscode/pyvenv.cfg
+git_vscode/bin/activate
+git_vscode/bin/activate.csh
+git_vscode/bin/activate.fish
+git_vscode/bin/Activate.ps1
+git_vscode/bin/pip
+git_vscode/bin/pip3
+git_vscode/bin/pip3.12
+git_vscode/bin/python3
+git_vscode/bin/python3.12
