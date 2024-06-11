@@ -63,7 +63,7 @@ Ensure you have the following installed:
 Clone the repository and install dependencies:
 
 ```bash
-git clone https://github.com/kaushiksam/parametric-speech-synthesis.git
+git clone https://github.com/kaushikvr/parametric-speech-synthesis.git
 cd parametric-speech-synthesis
 pip install -r requirements.txt
 ```
