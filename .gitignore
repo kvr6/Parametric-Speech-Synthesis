@@ -174,3 +174,14 @@ git_vscode/bin/python3
 git_vscode/bin/python3.12
 git_vscode/bin/f2py
 .DS_Store
+jupyter_env/pyvenv.cfg
+jupyter_env/bin/activate
+jupyter_env/bin/activate.csh
+jupyter_env/bin/activate.fish
+jupyter_env/bin/Activate.ps1
+jupyter_env/bin/pip
+jupyter_env/bin/pip3
+jupyter_env/bin/pip3.12
+jupyter_env/bin/python
+jupyter_env/bin/python3
+jupyter_env/bin/python3.12
