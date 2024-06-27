@@ -1,47 +1,55 @@
-import pyttsx3
 import os
 import numpy as np
 from scipy.io import wavfile
 import matplotlib.pyplot as plt
+from gtts import gTTS
+from playsound import playsound
+from .user_profiling import UserProfile
+from .context_analysis import ContextAnalyzer
 
 class SpeechSynthesizer:
     def __init__(self, user_profile, context):
         self.user_profile = user_profile
         self.context = context
-        self.engine = pyttsx3.init()
 
     def apply_personalization(self):
-        # Adjust voice properties based on user preferences and context
-        voices = self.engine.getProperty('voices')
+        # Note: gTTS doesn't support real-time voice characteristic changes
+        # We'll simulate personalization by adjusting the text
+        pitch = self.user_profile.get_preference('pitch')
+        speed = self.user_profile.get_preference('speed')
+        volume = self.user_profile.get_preference('volume')
         voice_gender = self.user_profile.get_preference('voice_gender')
-        self.engine.setProperty('voice', voices[0].id if voice_gender == 'male' else voices[1].id)
+        
+        return f"Simulating {pitch} pitch, {speed} speed, volume level {volume}, and {voice_gender} voice. "
 
-        pitch = {'low': 50, 'medium': 100, 'high': 150}[self.user_profile.get_preference('pitch')]
-        self.engine.setProperty('pitch', pitch)
-
-        rate = {'slow': 150, 'medium': 200, 'fast': 250}[self.user_profile.get_preference('speed')]
-        self.engine.setProperty('rate', rate)
-
-        volume = self.user_profile.get_preference('volume') / 10  # Assuming volume is 1-10 in user preferences
-        self.engine.setProperty('volume', volume)
-
-    def synthesize_speech(self, text, output_file='synthesized_speech.wav'):
-        self.apply_personalization()
+    def synthesize_speech(self, text, output_file='synthesized_speech.mp3'):
+        personalization_text = self.apply_personalization()
+        full_text = personalization_text + text
 
         output_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'results')
         os.makedirs(output_dir, exist_ok=True)
         output_path = os.path.join(output_dir, output_file)
 
-        self.engine.save_to_file(text, output_path)
-        self.engine.runAndWait()
+        try:
+            tts = gTTS(full_text)
+            tts.save(output_path)
+            print(f"Synthesized speech saved to {output_path}")
 
-        print(f"Synthesized speech saved to {output_path}")
+            # Play the audio
+            playsound(output_path)
 
-        # Generate and save spectrogram
-        sample_rate, audio = wavfile.read(output_path)
-        self.plot_spectrogram(audio, sample_rate)
+            # Generate and save spectrogram
+            self.plot_spectrogram(output_path)
+        except Exception as e:
+            print(f"Error during speech synthesis: {e}")
+            print("Falling back to text output.")
+            with open(output_path.replace('.mp3', '.txt'), 'w') as f:
+                f.write(f"TTS Error. Text content: {full_text}")
 
-    def plot_spectrogram(self, audio, sample_rate):
+    def plot_spectrogram(self, audio_file):
+        # Read the audio file
+        sample_rate, audio = wavfile.read(audio_file)
+        
         plt.figure(figsize=(10, 4))
         plt.specgram(audio, Fs=sample_rate, cmap='viridis')
         plt.title('Spectrogram of Synthesized Speech')
@@ -53,9 +61,6 @@ class SpeechSynthesizer:
         plt.close()
 
 def main():
-    from user_profiling import UserProfile
-    from context_analysis import ContextAnalyzer
-
     user_profile = UserProfile('user_001')
     context_analyzer = ContextAnalyzer()
     current_context = context_analyzer.get_current_context()

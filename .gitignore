@@ -195,3 +195,4 @@ jupyter_env/bin/pyftmerge
 jupyter_env/bin/pyftsubset
 jupyter_env/bin/ttx
 jupyter_env/share/man/man1/ttx.1
+/jupyter_env

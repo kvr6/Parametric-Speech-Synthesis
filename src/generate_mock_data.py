@@ -4,17 +4,6 @@ import random
 from datetime import datetime, timedelta
 import os
 
-def generate_phoneme_formant_data():
-    phonemes = ['a', 'e', 'i', 'o', 'u', 'p', 't', 'k', 's', 'm', 'n']
-    data = []
-    for phoneme in phonemes:
-        for i in range(3):  # 3 formants per phoneme
-            formant_freq = random.randint(200, 3000)
-            bandwidth = random.randint(50, 300)
-            data.append([phoneme, f'F{i+1}', formant_freq, bandwidth])
-    
-    return data
-
 def generate_user_preferences():
     users = []
     for i in range(100):  # Generate data for 100 users
@@ -66,13 +55,6 @@ def main():
     # Ensure data directory exists
     data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
     os.makedirs(data_dir, exist_ok=True)
-
-    # Generate and save phoneme formant data
-    phoneme_data = generate_phoneme_formant_data()
-    with open(os.path.join(data_dir, 'phoneme_formant_data.csv'), 'w', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerow(['Phoneme', 'Formant', 'Frequency', 'Bandwidth'])
-        writer.writerows(phoneme_data)
 
     # Generate and save user preferences
     user_prefs = generate_user_preferences()

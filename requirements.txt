@@ -2,5 +2,5 @@ numpy==1.26.2
 scipy==1.11.4
 matplotlib==3.8.2
 pandas==2.1.4
-pyttsx3==2.90
-setuptools>=65.5.0
+gTTS==2.3.2
+playsound==1.2.2
