@@ -173,3 +173,4 @@ git_vscode/bin/pip3.12
 git_vscode/bin/python3
 git_vscode/bin/python3.12
 git_vscode/bin/f2py
+.DS_Store
