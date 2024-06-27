@@ -87,6 +87,8 @@ python src/generate_mock_data.py
 
 **Note**: These are mock datasets generated for illustration purposes. In a production environment, you would replace these with real user data and more comprehensive datasets.
 
+**Important**: The `data/` directory is included in `.gitignore` to prevent committing large or sensitive datasets to the repository. Each developer should generate their own mock data locally using the `generate_mock_data.py` script.
+
 ## Code Description
 
 (Detailed description of each Python script in the `src/` directory will be added here)
