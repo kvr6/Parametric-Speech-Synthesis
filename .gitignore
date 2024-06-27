@@ -189,3 +189,9 @@ data/context_samples.json
 data/phoneme_formant_data.csv
 data/sample_dialogues.txt
 data/user_preferences.json
+jupyter_env/bin/f2py
+jupyter_env/bin/fonttools
+jupyter_env/bin/pyftmerge
+jupyter_env/bin/pyftsubset
+jupyter_env/bin/ttx
+jupyter_env/share/man/man1/ttx.1
