@@ -185,3 +185,7 @@ jupyter_env/bin/pip3.12
 jupyter_env/bin/python
 jupyter_env/bin/python3
 jupyter_env/bin/python3.12
+data/context_samples.json
+data/phoneme_formant_data.csv
+data/sample_dialogues.txt
+data/user_preferences.json
