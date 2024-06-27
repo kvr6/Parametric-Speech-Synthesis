@@ -23,7 +23,8 @@ def generate_user_preferences():
             "pitch": random.choice(["low", "medium", "high"]),
             "speed": random.choice(["slow", "medium", "fast"]),
             "accent": random.choice(["neutral", "british", "american", "australian"]),
-            "volume": random.randint(1, 10)
+            "volume": random.randint(1, 10),
+            "voice_gender": random.choice(['male', 'female'])
         }
         users.append(user)
     
