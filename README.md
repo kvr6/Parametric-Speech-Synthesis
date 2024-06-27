@@ -57,22 +57,47 @@ personalized-voice-assistant/
 
 ## Installation
 
-1. Clone the repository:
-   ```
+1. Ensure you have Python 3.11 or later installed. This project may encounter issues with Python 3.12 due to recent changes in module structures.
+
+2. Clone the repository:
+   ```bash
    git clone https://github.com/yourusername/personalized-voice-assistant.git
    cd personalized-voice-assistant
    ```
 
-2. Create a virtual environment (optional but recommended):
-   ```
-   python -m venv venv
-   source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+3. Create a virtual environment:
+   ```bash
+   python3.11 -m venv venv
    ```
 
-3. Install the required packages:
+4. Activate the virtual environment:
+   - On macOS and Linux:
+     ```bash
+     source venv/bin/activate
+     ```
+   - On Windows:
+     ```bash
+     venv\Scripts\activate
+     ```
+
+5. Upgrade pip and setuptools:
+   ```bash
+   python -m pip install --upgrade pip
+   pip install --upgrade setuptools
    ```
+
+6. Install the required packages:
+   ```bash
    pip install -r requirements.txt
    ```
+
+If you encounter any issues during installation, please refer to the troubleshooting section in this README or open an issue on the project's GitHub page.
+
+## Troubleshooting
+
+- If you encounter a `ModuleNotFoundError: No module named 'distutils'` error, try using Python 3.11 instead of 3.12, as some libraries may not yet be fully compatible with Python 3.12.
+- Ensure that you're using the latest versions of pip and setuptools before installing the requirements.
+- If you're still facing issues, try creating a new virtual environment and installing the requirements there.
 
 ## Running the Project
 
